@@ -1,4 +1,4 @@
-// CoastalStory: Sol Vega, Inés Rojas, and Dario Vela in an original six-contract harbor story.
+// Vista Mar: Low Tide — CoastalStory: original harbor dialogue, radio beats, and portraits for Sol, Inés, and Vela.
 (() => {
   const INTRO_BEATS = [
     { who: 'Sol Vega', text: 'Three years off the road. One letter pulled me back.' },

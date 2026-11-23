@@ -1,5 +1,7 @@
 # Vista Mar: Low Tide
 
+<!-- Vista Mar: Low Tide — entry overview, controls, and reproducible local checks. -->
+
 [![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01)
 [![make.fun rank](https://make.fun/badge/gta6-01/mhmdrizzzki/makefun-vista-mar/rank.svg)](https://make.fun/bounty/gta6-01)
 [![make.fun reward](https://make.fun/badge/gta6-01/mhmdrizzzki/makefun-vista-mar/reward.svg)](https://make.fun/bounty/gta6-01)

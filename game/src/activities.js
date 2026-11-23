@@ -1,4 +1,4 @@
-// CoastalActivities: repeatable courier work, a timed street circuit, garage services, and eight original postcards.
+// Vista Mar: Low Tide — CoastalActivities: courier jobs, timed street circuit, garage services, and eight postcards.
 (() => {
   const COASTAL_POSTCARDS = [
     { x: 1220, y: 1260, name: 'The fountain at Jardín' }, { x: 1820, y: 789, name: 'Last show at Luna Azul' },

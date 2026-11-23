@@ -1,4 +1,4 @@
-// CanvasMenus: original title art, keyboard/mouse menus, controls, city atlas, respawn, and campaign epilogue.
+// Vista Mar: Low Tide — CanvasMenus: original title art, keyboard/mouse menus, controls, atlas, respawn, and epilogue.
 (() => {
   const CONTROL_REFERENCE = [
     ['WASD / ARROWS', 'Move / accelerate, reverse, steer'], ['MOUSE / LMB', 'Aim / fire the Nova 9 pistol'],

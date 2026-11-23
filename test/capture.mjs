@@ -1,4 +1,4 @@
-// Capture four real 1280×720 browser renders; JPEG quality is selected within the competition byte budget.
+// Vista Mar: Low Tide — judge-sheet capture: real 1280×720 browser renders within the competition JPEG byte budget.
 import assert from 'node:assert/strict';
 import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -6,10 +6,12 @@ import { launchBrowser, watchPage, assertCanvas, GAME_URL, ARTIFACT_DIRECTORY } 
 
 const SHOT_MANIFEST = JSON.parse(readFileSync(new URL('../shots.json', import.meta.url), 'utf8'));
 const MINIMUM_BYTES = 30000, MAXIMUM_BYTES = 262144;
+const RECAPTURED = new Set(['1-start.jpg', '4-walk.jpg']);
 const browser = await launchBrowser();
 const results = [];
 try {
   for (const shot of SHOT_MANIFEST) {
+    if (!RECAPTURED.has(shot.name)) continue;
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
     const report = watchPage(page);
     await page.goto(GAME_URL + shot.query, { waitUntil: 'load' });

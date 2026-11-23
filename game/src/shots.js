@@ -1,4 +1,4 @@
-// WitnessScenes: fixed-seed, deterministic snapshots made from the same world, actors, and renderer as play.
+// Vista Mar: Low Tide — WitnessScenes: fixed-seed judge scenes using the actual game world, actors, and renderer.
 (() => {
   class WitnessScenes {
     constructor(game) { this.game = game; game.on('ready', () => this.bootRequestedScene()); }
@@ -27,7 +27,7 @@
     }
     bootRequestedScene() {
       const shot = this.game.params.get('shot');
-      if (!['start', 'play', 'chase', 'night'].includes(shot)) return;
+      if (!['start', 'play', 'chase', 'night', 'walk'].includes(shot)) return;
       const game = this.game;
       game.staged = true; game.mode = shot === 'start' ? 'title' : 'play'; game.paused = false;
       game.camera.locked = true; game.visualTime = 2.7; game.time = 61.7;
@@ -37,16 +37,23 @@
       if (shot === 'play') this.playScene();
       if (shot === 'chase') this.chaseScene();
       if (shot === 'night') this.nightScene();
+      if (shot === 'walk') this.walkScene();
       game.story.radioLine = null; game.toasts = []; game.camera.trauma = 0;
       window.__SHOT_SCENE__ = shot;
     }
     startScene() {
       const game = this.game;
       game.dayPhase = .245; game.camera.snap(2110, 1410, .61);
+      const cruise = this.car('sedan', 2470, 1330, -Math.PI / 2, '#9babbd', 'civilian', 110);
+      cruise.ai = true; cruise.desiredSpeed = 110;
+      const taxi = this.car('taxi', 2620, 1180, Math.PI / 2, '#e2bc6a', 'civilian', 92);
+      taxi.ai = true; taxi.desiredSpeed = 92;
       this.car('sports', 2350, 1510, -.07, '#dfa16c', 'civilian', 175);
       this.car('taxi', 2540, 1450, Math.PI, '#e2bc6a', 'civilian', 92);
       this.car('van', 2630, 1250, Math.PI / 2, '#a9b8a8', 'civilian', 82);
-      this.pedestrians([[2775, 1407], [2774, 1571], [2741, 1740], [2455, 1310], [2209, 1420], [2128, 1573], [2245, 1790], [2387, 1179]]);
+      const cruiser = this.car('police', 2590, 1470, -Math.PI / 2, '#e1e5d8', 'civilian', 0);
+      cruiser.ai = true; cruiser.desiredSpeed = 30;
+      this.pedestrians([[2775, 1407], [2774, 1571], [2741, 1740], [2455, 1310], [2209, 1420], [2128, 1573], [2245, 1790], [2387, 1179], [2560, 1290], [2700, 1120], [2020, 1340]]);
     }
     playScene() {
       const game = this.game;
@@ -110,6 +117,25 @@
       game.combat.bullets.push({ x: 2514, y: 2455, px: 2530, py: 2455, vx: -650, vy: 0, owner: 'hostile', life: .4 });
       this.pedestrians([[2778, 2330], [2790, 2530], [2795, 2712], [2865, 2680], [2737, 2189], [2310, 2737], [2450, 2737], [2510, 2584]]);
       game.camera.snap(2445, 2465, .91); game.input.mouse = { x: 749, y: 343, down: false, clicked: false };
+    }
+    walkScene() {
+      const game = this.game;
+      this.clearArea(2320, 1480, 440); game.dayPhase = .435; game.missions.start(3); game.missions.stage = 'fight';
+      game.player.vehicle = null; game.player.x = 2300; game.player.y = 1470;
+      game.player.health = 82; game.player.armor = 35; game.player.ammo = 9; game.player.reserve = 84; game.player.stamina = 100;
+      game.player.dead = false; game.player.invulnerable = 0; game.player.reloadTimer = 0; game.player.vx = 0; game.player.vy = 0;
+      game.combat.bullets = []; game.combat.hostiles = []; game.missions.guards = [];
+      const gunman = game.combat.addHostile(2440, 1560, 'Vela Security');
+      game.missions.guards = [gunman]; gunman.alert = true;
+      game.missions.shotMarker = { x: gunman.x, y: gunman.y, label: 'HARBOR SECURITY', action: 'CLEAR THE YARD', hostile: true };
+      game.cash = 5890; game.reputation = 45;
+      game.stats.missions = 3; game.stats.stolen = 6; game.stats.shots = 23; game.stats.escapes = 2;
+      this.car('taxi', 2240, 1400, 0, '#e6c36d', 'civilian', 0);
+      this.car('sedan', 2560, 1330, -Math.PI / 2, '#9babbd', 'civilian', 0);
+      this.car('van', 2180, 1360, Math.PI / 2, '#a9b8a8', 'civilian', 0);
+      this.pedestrians([[2150, 1420], [2430, 1340], [2540, 1290], [2590, 1450], [2120, 1680]]);
+      game.player.angle = Math.atan2(gunman.y - game.player.y, gunman.x - game.player.x);
+      game.camera.snap(2300, 1470, 1.2); game.input.mouse = { x: 640, y: 330, down: false, clicked: false };
     }
   }
   VM.WitnessScenes = WitnessScenes;

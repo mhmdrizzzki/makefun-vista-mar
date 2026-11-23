@@ -1,4 +1,4 @@
-// Traverse every contract through its public gameplay actions; verify menus, save/load, the atlas, and arrest recovery.
+// Vista Mar: Low Tide — campaign regression: six contracts, menus, save/load, atlas waypoints, and arrest recovery.
 import assert from 'node:assert/strict';
 import { launchBrowser, watchPage, GAME_URL } from './browser.mjs';
 

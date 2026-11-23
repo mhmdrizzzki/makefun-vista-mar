@@ -1,4 +1,4 @@
-// Print boot diagnostics from the real browser without hiding a failure behind a readiness timeout.
+// Vista Mar: Low Tide — boot diagnostics: browser console, module installation, loading state, and game snapshot.
 import { launchBrowser, GAME_URL } from './browser.mjs';
 
 const browser = await launchBrowser();

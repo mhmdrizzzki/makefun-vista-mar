@@ -1,4 +1,4 @@
-// Load every witnessed scene, reject browser errors/network dependencies, and verify real, stable canvas pixels.
+// Vista Mar: Low Tide — scene smoke checks: readiness, world population, browser errors, and stable canvas pixels.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { launchBrowser, watchPage, assertCanvas, GAME_URL } from './browser.mjs';
@@ -28,7 +28,7 @@ try {
     assert.equal(state.mode, scene === 'start' ? 'title' : 'play');
     if (scene === 'chase') assert.equal(state.wanted, 3);
     if (scene === 'play' || scene === 'chase') assert.equal(state.vehicle, 'sports');
-    if (scene === 'night') assert.equal(state.vehicle, null);
+    if (scene === 'walk') assert.equal(state.vehicle, null);
     const first = await pixelFingerprint(page); await page.waitForTimeout(240);
     assert.equal(await pixelFingerprint(page), first, 'A staged scene must remain visually stable.');
     assert.deepEqual(report.errors, [], `${shot.name}: page errors`);

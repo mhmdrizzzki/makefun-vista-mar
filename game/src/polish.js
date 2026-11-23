@@ -1,4 +1,4 @@
-// FinalCoastalPolish: real-time fixed-step physics, drive-by combat, rooftop life, waterfront neon, and cinematic lighting.
+// Vista Mar: Low Tide — FinalCoastalPolish: fixed-step physics, drive-by combat, rooftop detail, neon, and soft lighting.
 (() => {
   class FinalCoastalPolish {
     constructor(game) {

@@ -1,4 +1,4 @@
-// Keyboard edges and canvas-space mouse aiming; no framework or pointer lock.
+// Vista Mar: Low Tide — DesktopInput: keyboard edges and canvas-space mouse aiming without pointer lock.
 (() => {
   class DesktopInput {
     constructor(canvas) {

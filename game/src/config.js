@@ -1,4 +1,4 @@
-// Vista Mar's original world scale, palette, controls, and vehicle roster.
+// Vista Mar: Low Tide — original world scale, palette, population budgets, and six-chassis vehicle roster.
 (() => {
   const GAME_CONFIG = Object.freeze({
     title: 'VISTA MAR', subtitle: 'LOW TIDE', version: '1.0',

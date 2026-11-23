@@ -1,4 +1,4 @@
-// Seeded geometry and immediate-mode drawing primitives shared by all systems.
+// Vista Mar: Low Tide — SeededRandom, collision geometry, and immediate-mode drawing primitives shared by all systems.
 (() => {
   class SeededRandom {
     constructor(seed = 16) { this.state = seed >>> 0; }

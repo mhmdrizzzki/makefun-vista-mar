@@ -1,4 +1,4 @@
-// Vista Mar's extensible simulation host: additive, independently installed game systems.
+// Vista Mar: Low Tide — simulation host, sequential module boot, system installation, and frame readiness.
 const ORIGINAL_FEATURE_MODULES = [
   'config', 'utils', 'input', 'city', 'world', 'camera', 'player', 'render',
   'vehicles', 'traffic', 'pedestrians', 'particles', 'audio', 'combat', 'police',

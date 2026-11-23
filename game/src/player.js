@@ -1,4 +1,4 @@
-// SolVega: the original courier protagonist, with responsive walking, sprinting, and layered damage.
+// Vista Mar: Low Tide — SolVega: courier protagonist with responsive walking, sprinting, pistol aiming, and armor.
 (() => {
   class SolVega {
     constructor(game) {

@@ -1,4 +1,4 @@
-// A development-only real canvas capture for visual iteration, kept outside the submission screenshots.
+// Vista Mar: Low Tide — local visual preview: real canvas captures stored outside the submission screenshots.
 import { resolve } from 'node:path';
 import { launchBrowser, watchPage, assertCanvas, GAME_URL, ARTIFACT_DIRECTORY } from './browser.mjs';
 

@@ -1,4 +1,4 @@
-// ProceduralAudio: every engine, siren, impact, and musical cue is synthesized locally with WebAudio.
+// Vista Mar: Low Tide — ProceduralAudio: locally synthesized engines, sirens, impacts, and musical cues.
 (() => {
   class ProceduralAudio {
     constructor(game) {

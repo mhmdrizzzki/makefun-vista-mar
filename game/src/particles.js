@@ -1,4 +1,4 @@
-// StreetParticles: bounded sparks, muzzle flashes, smoke, blast rings, and persistent impact decals.
+// Vista Mar: Low Tide — StreetParticles: bounded sparks, muzzle flashes, smoke, blast rings, and impact decals.
 (() => {
   class StreetParticles {
     constructor(game) { this.game = game; this.list = []; this.decals = []; this.flashes = []; }

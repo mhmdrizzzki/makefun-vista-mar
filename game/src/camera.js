@@ -1,4 +1,4 @@
-// FollowCamera: spring-like tracking, speed-sensitive framing, aiming lead, and impact shake.
+// Vista Mar: Low Tide — FollowCamera: smooth tracking, speed-sensitive framing, aiming lead, and impact shake.
 (() => {
   class FollowCamera {
     constructor(game) { this.game = game; this.x = 2250; this.y = 1350; this.zoom = .66; this.trauma = 0; this.locked = false; }

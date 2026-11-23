@@ -1,4 +1,4 @@
-// WorldGeometry: solid footprints, visibility, restorative pickups, and a welcoming safehouse.
+// Vista Mar: Low Tide — WorldGeometry: solid footprints, line of sight, restorative pickups, and safehouse recovery.
 (() => {
   class WorldGeometry {
     constructor(game) {

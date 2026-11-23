@@ -1,4 +1,4 @@
-// ArcadeVehicle and VehicleFleet: six original chassis, carjacking, inertia, damage, and night lighting.
+// Vista Mar: Low Tide — ArcadeVehicle and VehicleFleet: six chassis, carjacking, inertia, damage, and vehicle lighting.
 (() => {
   const VEHICLE_COLORS = ['#d58069', '#85b6a6', '#dfcc8d', '#92a6ba', '#b7bec0', '#a18b9e', '#536b70', '#e7d5b3'];
   let nextVehicleId = 1;

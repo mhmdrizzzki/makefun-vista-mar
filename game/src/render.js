@@ -1,4 +1,4 @@
-// CoastalRenderer: cached handmade architecture, painter-sorted actors, and atmospheric light passes.
+// Vista Mar: Low Tide — CoastalRenderer: cached handmade architecture, painter-sorted actors, and atmospheric lighting.
 (() => {
   class CoastalRenderer {
     constructor(game) { this.game = game; this.night = 0; this.entityDecorators = []; }

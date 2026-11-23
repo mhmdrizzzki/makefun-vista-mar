@@ -1,4 +1,4 @@
-// HarborCampaign: six sequential, multi-stage contracts with vehicle, escape, combat, and pursuit objectives.
+// Vista Mar: Low Tide — HarborCampaign: six multi-stage contracts linking on-foot, theft, escape, combat, and pursuit.
 (() => {
   const STORY_CONTRACTS = [
     { name: 'A LINE IN THE SAND', reward: 150, color: '#92e6c5' },

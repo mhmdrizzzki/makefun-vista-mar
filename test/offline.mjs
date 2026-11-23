@@ -1,4 +1,4 @@
-// Verify the desktop Chrome local-file path without any HTTP request or build step.
+// Vista Mar: Low Tide — offline regression: desktop Chrome local-file rendering with zero HTTP requests.
 import assert from 'node:assert/strict';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';

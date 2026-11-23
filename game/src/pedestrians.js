@@ -1,4 +1,4 @@
-// SidewalkCrowd: original civilian silhouettes, sidewalk routes, crossings, and panic propagation.
+// Vista Mar: Low Tide — SidewalkCrowd: civilian silhouettes, sidewalk routes, signal-aware crossings, and panic.
 (() => {
   const CIVILIAN_CLOTHES = ['#d6a56c', '#cf8c80', '#9ebda6', '#91a3b4', '#d8c9a2', '#8fb9b6', '#bb91a5'];
   class CivilianWalker {

@@ -1,4 +1,4 @@
-// Exercise real mouse combat, reloads, escalation, police gunfire, explosions, and hidden-star decay.
+// Vista Mar: Low Tide — crime regression: mouse combat, reloads, wanted escalation, police gunfire, blasts, and escapes.
 import assert from 'node:assert/strict';
 import { launchBrowser, watchPage, GAME_URL } from './browser.mjs';
 

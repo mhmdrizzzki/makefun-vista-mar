@@ -1,4 +1,4 @@
-// RoadTraffic: lane-aware routes, intersection turns, traffic signals, obstacles, and frightened drivers.
+// Vista Mar: Low Tide — RoadTraffic: lane-aware routes, intersection turns, signal stops, obstacles, and driver panic.
 (() => {
   class RoadTraffic {
     constructor(game) {

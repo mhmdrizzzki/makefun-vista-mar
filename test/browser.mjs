@@ -1,4 +1,4 @@
-// Use only the host-provided browser tools; all temporary profiles live inside this repository.
+// Vista Mar: Low Tide — shared host-browser harness; temporary profiles and reports stay in local test artifacts.
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 

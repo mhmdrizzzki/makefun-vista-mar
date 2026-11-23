@@ -1,4 +1,4 @@
-// CoastalMinimap: circular local navigation, street-graph GPS, entity blips, and an interactive full-city atlas.
+// Vista Mar: Low Tide — CoastalMinimap: local navigation, street-graph GPS, entity blips, and full-city atlas.
 (() => {
   class CoastalMinimap {
     constructor(game) { this.game = game; this.radius = 89; this.fullBounds = null; }

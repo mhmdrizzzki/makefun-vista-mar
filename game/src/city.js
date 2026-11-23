@@ -1,4 +1,4 @@
-// CoastalCity: sixteen authored blocks, a working harbor, and a seeded architectural language.
+// Vista Mar: Low Tide — CoastalCity: sixteen authored blocks, working harbor, storefronts, and seeded architecture.
 (() => {
   const DISTRICT_NAMES = ['Alto Sol', 'Jardín', 'Cobre', 'Puerto Viejo'];
   const ROOF_PALETTE = ['#b78e77', '#89a5a0', '#bcb681', '#9a9aa7', '#c79588', '#a4b191'];

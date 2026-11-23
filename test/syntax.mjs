@@ -1,4 +1,4 @@
-// Parse every handwritten JavaScript file with the actual Node runtime.
+// Vista Mar: Low Tide — syntax checks: parse every handwritten game script and browser test with the Node runtime.
 import { readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';

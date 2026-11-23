@@ -1,4 +1,4 @@
-// BrowserSaveSlot: versioned localStorage snapshots with position, campaign, heat, vehicle, and side-job progress.
+// Vista Mar: Low Tide — BrowserSaveSlot: versioned local snapshots of position, campaign, heat, vehicle, and side jobs.
 (() => {
   const SAVE_SLOT_KEY = 'vista-mar.low-tide.save.v1';
   class BrowserSaveSlot {

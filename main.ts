@@ -1,4 +1,4 @@
-// Vista Mar: Low Tide — original static game and witnessed renders, packaged without a build step.
+// Vista Mar: Low Tide — package the original static game and byte-budgeted witness sheet without a build step.
 // The dossier is deliberately produced by the unchanged competition library.
 import { cpSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';

@@ -1,4 +1,4 @@
-// Verify an occupied-car theft, responsive acceleration, safe exit, and a red-light traffic decision.
+// Vista Mar: Low Tide — driving regression: occupied-car theft, acceleration, safe exit, and red-light traffic stops.
 import assert from 'node:assert/strict';
 import { launchBrowser, watchPage, GAME_URL } from './browser.mjs';
 

@@ -1,6 +1,6 @@
 [
-  { "name": "1-start.jpg", "query": "?shot=start&seed=16" },
-  { "name": "2-play.jpg", "query": "?shot=play&seed=16" },
-  { "name": "3-chase.jpg", "query": "?shot=chase&seed=16" },
-  { "name": "4-night.jpg", "query": "?shot=night&seed=16" }
+  { "name": "1-start.jpg", "query": "?shot=start&seed=16", "description": "Golden-hour title and menu overlooking the coastal city." },
+  { "name": "2-play.jpg", "query": "?shot=play&seed=16", "description": "Drive the stolen golden Caimán through downtown traffic to Rojas Motor." },
+  { "name": "3-chase.jpg", "query": "?shot=chase&seed=16", "description": "A three-star nighttime police pursuit with the escape objective and full driving HUD." },
+  { "name": "4-walk.jpg", "query": "?shot=walk&seed=16", "description": "On-foot pistol combat at a busy downtown street corner with the full HUD." }
 ]

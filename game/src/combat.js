@@ -1,4 +1,4 @@
-// PistolCombat: swept bullets, reloads, melee, shootable vehicles, and original harbor security gunmen.
+// Vista Mar: Low Tide — PistolCombat: swept bullets, reloads, melee, shootable vehicles, and harbor security.
 (() => {
   class HarborGunman {
     constructor(game, x, y, name = 'Vela Security') {

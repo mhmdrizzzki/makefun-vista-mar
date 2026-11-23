@@ -1,4 +1,4 @@
-// StreetHUD: clean contract typography, vitals, five wanted stars, navigation, speed, and contextual controls.
+// Vista Mar: Low Tide — StreetHUD: mission objectives, vitals, five wanted stars, navigation, and contextual controls.
 (() => {
   class StreetHUD {
     constructor(game) { this.game = game; }

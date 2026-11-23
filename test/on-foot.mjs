@@ -1,4 +1,4 @@
-// Exercise real keyboard walking and solid building collisions in the browser.
+// Vista Mar: Low Tide — on-foot regression: real keyboard movement, open safehouse spawn, and solid building collisions.
 import assert from 'node:assert/strict';
 import { launchBrowser, watchPage, GAME_URL } from './browser.mjs';
 

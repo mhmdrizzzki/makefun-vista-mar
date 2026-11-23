@@ -1,4 +1,4 @@
-// WantedResponse: five heat tiers, street-graph pursuits, armed officers, searches, and arrest pressure.
+// Vista Mar: Low Tide — WantedResponse: five heat tiers, street-graph pursuits, armed officers, searches, and arrests.
 (() => {
   const WANTED_THRESHOLDS = [0, 1, 55, 105, 170, 250];
   class PatrolOfficer {
