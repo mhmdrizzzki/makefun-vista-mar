@@ -19,15 +19,42 @@
       this.game.pedestrians.list = this.game.pedestrians.list.filter(person => Math.hypot(person.x - x, person.y - y) > radius);
     }
     drive(car) { this.game.player.vehicle = car; car.driver = 'sol'; this.game.player.x = car.x; this.game.player.y = car.y; }
-    skid(points) {
+    skid(points, width = 9, life = 70) {
       for (let n = 1; n < points.length; n++) {
-        for (const side of [-1, 1]) this.game.vehicles.skids.push({ px: points[n - 1][0], py: points[n - 1][1] + side * 9,
-          x: points[n][0], y: points[n][1] + side * 9, life: 70 });
+        for (const side of [-1, 1]) this.game.vehicles.skids.push({ px: points[n - 1][0], py: points[n - 1][1] + side * width,
+          x: points[n][0], y: points[n][1] + side * width, life });
       }
+    }
+    disarmHeatLoop() {
+      if (!this.heatDriver) return;
+      const index = this.game.screenDraw.indexOf(this.heatDriver);
+      if (index >= 0) this.game.screenDraw.splice(index, 1);
+      this.heatDriver = null;
+    }
+    heatDriveBy(hero, wreck) {
+      const game = this.game;
+      game.combat.bullets = game.combat.bullets.filter(bullet => !bullet.heat);
+      game.combat.shoot(hero.x, hero.y, hero.angle, 'sol');
+      const shot = game.combat.bullets[game.combat.bullets.length - 1];
+      if (shot) shot.heat = true;
+      game.particles.smoke(wreck.x + game.rng.range(-7, 7), wreck.y + game.rng.range(-5, 5), '#8f968c', 5);
+      game.particles.smoke(hero.x - Math.cos(hero.angle) * 46, hero.y - Math.sin(hero.angle) * 46, '#a4ab9f', 4);
+    }
+    armHeatLoop(hero, wreck) {
+      const game = this.game;
+      this.disarmHeatLoop();
+      this.heatDriver = () => {
+        if (game.__SHOT_SCENE__ !== 'heat' || game.frameCount <= 0 || game.frameCount % 18 !== 0) return;
+        if (this.heatFiredFrame === game.frameCount) return;
+        this.heatFiredFrame = game.frameCount;
+        this.heatDriveBy(hero, wreck);
+      };
+      game.screenDraw.push(this.heatDriver);
     }
     bootRequestedScene() {
       const shot = this.game.params.get('shot');
       if (!['start', 'play', 'chase', 'night', 'walk', 'heat'].includes(shot)) return;
+      this.disarmHeatLoop();
       const game = this.game;
       game.staged = true; game.mode = shot === 'start' ? 'title' : 'play'; game.paused = false;
       game.camera.locked = true; game.visualTime = 2.7; game.time = 61.7;
@@ -147,12 +174,15 @@
       game.missions.shotMarker = { x: 2340, y: 1520, label: 'HOLD THE LINE', action: 'KEEP MOVING', hostile: false };
       const hero = this.car('sports', 2050, 1490, -0.4, '#91d6bc', 'sol', 300); this.drive(hero);
       hero.hp = 80; hero.speed = 300; hero.vx = Math.cos(-0.4) * 300; hero.vy = Math.sin(-0.4) * 300;
-      this.skid([[1995, 1515], [2040, 1498]]);
+      this.skid([[1892, 1571], [1926, 1554], [1962, 1539], [1997, 1525], [2026, 1511], [2043, 1500], [2050, 1490]], 10, 74);
+      this.skid([[1978, 1492], [2012, 1478], [2040, 1468]], 7, 60);
       const box = (x, y, angle) => { const unit = game.police.spawnUnit(x, y, angle); unit.speed = 250; unit.desiredSpeed = 250; return unit; };
       box(1920, 1448, -0.2); box(1920, 1532, 0.2); box(2260, 1452, 2.9); box(2260, 1528, -2.9);
       const wreck = this.car('sedan', 2340, 1520, 0.6, '#a8b4bd', null); wreck.damage(999, 'sol');
       game.particles.smoke(2340, 1520, '#8f968c', 8);
-      game.combat.bullets = []; game.combat.shoot(hero.x, hero.y, hero.angle, 'sol');
+      game.particles.smoke(2016, 1501, '#9aa298', 5); game.particles.smoke(1972, 1520, '#9aa298', 4);
+      this.heatDriveBy(hero, wreck);
+      this.armHeatLoop(hero, wreck);
       game.story.radio('Sol Vega', 'You wanted the coast. Now the coast wants you.', 6);
       game.camera.snap(2050, 1490, 1.1); game.input.mouse = { x: 640, y: 363, down: false, clicked: false };
       game.cash = 4230; game.reputation = 32; game.stats.missions = 2; game.stats.stolen = 5; game.stats.escapes = 1;
