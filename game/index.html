@@ -1,19 +1,22 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Block Dodger</title>
-<style>
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #11141b; }
-  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
-  /* Read aloud, never shown: the status line screen readers announce. */
-  #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10282c">
+  <meta name="description" content="Vista Mar: Low Tide. An original, hand-drawn coastal open-world crime game.">
+  <title>Vista Mar — Low Tide</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142e32'/%3E%3Cpath d='M8 18l15 31h9L47 18h-10L28 38l-9-20z' fill='%237ce5ca'/%3E%3Cpath d='M40 49h16' stroke='%23ff866e' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<canvas id="game" aria-label="Block Dodger: move the paddle left and right to dodge falling blocks and catch coins"></canvas>
-<p id="status" role="status" aria-live="polite"></p>
-<script type="module" src="./src/main.js"></script>
+  <canvas id="game" aria-label="Vista Mar: Low Tide — keyboard and mouse open-world game" tabindex="0"></canvas>
+  <div id="loading">VISTA MAR <span>Preparing the coast…</span></div>
+  <script>
+    const entry = document.createElement('script');
+    entry.src = './src/main.js';
+    entry.type = location.protocol === 'file:' ? 'text/javascript' : 'module';
+    document.head.appendChild(entry);
+  </script>
 </body>
 </html>

@@ -1,61 +1,25 @@
-// Every tuning number and colour in one place. The playfield is a fixed 1280x720 logical area;
-// the renderer scales it to the window, so no rule below depends on the screen size.
-
-export const FIELD = { width: 1280, height: 720, groundY: 664 };
-
-/** The simulation's fixed step, in seconds: 60 updates a second whatever the display's rate. */
-export const STEP = 1 / 60;
-
-export const PLAYER = {
-  width: 72,
-  height: 24,
-  speed: 560,
-  invulnerable: 1.5,
-};
-
-export const LIVES = 3;
-
-export const BLOCK = {
-  minWidth: 40,
-  maxWidth: 110,
-  height: 36,
-  speed: 240,
-  speedPerLevel: 30,
-  speedJitter: 90,
-  interval: 0.55,
-  intervalScale: 0.88,
-  minInterval: 0.14,
-  dodgePoints: 1,
-};
-
-export const COIN = {
-  size: 24,
-  speed: 190,
-  speedPerLevel: 14,
-  interval: 1.4,
-  intervalJitter: 0.8,
-  points: 10,
-};
-
-/** Seconds of play per level, and the last level: speeds and spawn rates stop growing there. */
-export const LEVEL = { seconds: 12, max: 12 };
-
-/** How many falling things can exist at once; the pool is allocated once, at boot. */
-export const POOL_SIZE = 64;
-
-export const PALETTE = {
-  backdrop: '#11141b',
-  sky: '#1b1f2a',
-  ground: '#2a3040',
-  player: '#4fc3f7',
-  block: '#e5534b',
-  coin: '#f2c94c',
-  panel: '#252b38',
-  text: '#eef1f5',
-  muted: '#8b93a3',
-};
-
-export const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
-
-/** Where the best score is kept between visits (this browser only). */
-export const BEST_KEY = 'block-dodger.best';
+// Vista Mar's original world scale, palette, controls, and vehicle roster.
+(() => {
+  const GAME_CONFIG = Object.freeze({
+    title: 'VISTA MAR', subtitle: 'LOW TIDE', version: '1.0',
+    width: 3200, height: 3200, roadWidth: 124,
+    roads: [300, 890, 1480, 2070, 2660], coast: 2830,
+    seed: 16, pedestrianCount: 160, trafficCount: 54,
+    maxParticles: 640, dayLength: 660, playerRadius: 11,
+    safehouse: { x: 449, y: 2380 }, garage: { x: 2384, y: 1664 },
+    colors: {
+      ink: '#102a30', dark: '#11242c', aqua: '#8cf0cd', coral: '#ff8d76',
+      gold: '#f8ca77', paper: '#f6f0de', muted: '#9cb4b5', road: '#35454c',
+      sidewalk: '#c5bc9f', sea: '#3c9fa1', grass: '#718d65',
+    },
+    vehicles: {
+      sedan: { name: 'Brisa 240', length: 51, width: 25, maxSpeed: 235, accel: 140, steer: 2.8, hp: 130 },
+      sports: { name: 'Caimán GT', length: 53, width: 26, maxSpeed: 350, accel: 210, steer: 3.3, hp: 110 },
+      van: { name: 'Mercado Panel', length: 64, width: 30, maxSpeed: 188, accel: 105, steer: 2.1, hp: 210 },
+      taxi: { name: 'Solana Taxi', length: 54, width: 26, maxSpeed: 247, accel: 150, steer: 2.7, hp: 145 },
+      police: { name: 'Patrol Interceptor', length: 57, width: 27, maxSpeed: 300, accel: 190, steer: 2.9, hp: 200 },
+      truck: { name: 'Puerto Hauler', length: 76, width: 31, maxSpeed: 170, accel: 90, steer: 1.9, hp: 280 },
+    },
+  });
+  window.VM.CONFIG = GAME_CONFIG;
+})();

@@ -1,0 +1,4 @@
+out/
+.makefun/
+test/artifacts/
+test/server.log

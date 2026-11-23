@@ -1,134 +1,110 @@
-// Boot and the one loop: input is read every frame, the world advances in fixed 1/60 s steps
-// (several in a slow frame, none in a fast one), and the renderer paints what is there. The game
-// moves between four screens: title, play, paused and game over.
-//
-// ?seed=N fixes the falling pattern. ?shot=start|play|end (with &seed=N) stages that scene
-// instead of running the loop, paints it twice and sets window.__shotReady for a screenshot.
-import { BEST_KEY, LIVES, STEP } from './config.js';
-import { createRandom } from './random.js';
-import { createWorld, EVENT_HIT, EVENT_OVER } from './world.js';
-import { ACTION_CONFIRM, ACTION_PAUSE, createInput } from './input.js';
-import { createRenderer, SCREEN_OVER, SCREEN_PAUSED, SCREEN_PLAY, SCREEN_TITLE } from './render.js';
-import { stageShot } from './shots.js';
+// Vista Mar's extensible simulation host: additive, independently installed game systems.
+const ORIGINAL_FEATURE_MODULES = [
+  'config', 'utils', 'input', 'city', 'world', 'camera', 'player', 'render',
+  'vehicles', 'traffic', 'pedestrians', 'particles', 'audio', 'combat', 'police',
+  'story', 'missions', 'minimap', 'hud', 'save', 'ui', 'shots', 'activities', 'polish',
+];
+window.VM = { installers: [], modules: [], CONFIG: null, util: null, game: null };
 
-/** The longest frame the loop catches up on; a longer stall (a hidden tab) is dropped, not replayed. */
-const MAX_FRAME = 0.25;
-
-const params = new URLSearchParams(window.location.search);
-const shot = params.get('shot');
-const seedParam = Number.parseInt(params.get('seed') ?? '', 10);
-const seed = Number.isInteger(seedParam) ? seedParam : Math.floor(Math.random() * 4294967296);
-
-const canvas = document.getElementById('game');
-const status = document.getElementById('status');
-const world = createWorld(createRandom(seed));
-const renderer = createRenderer(canvas);
-
-function readBest() {
-  try {
-    return Number.parseInt(window.localStorage.getItem(BEST_KEY) ?? '0', 10) || 0;
-  } catch {
-    return 0;
-  }
-}
-
-function saveBest(value) {
-  try {
-    window.localStorage.setItem(BEST_KEY, String(value));
-  } catch {
-    // Storage can be off (private windows): the best score then lasts this visit only.
-  }
-}
-
-function runShot(name) {
-  const scene = stageShot(name, world);
-  let painted = 0;
-  function paint() {
-    renderer.draw(world.state, scene.screen, scene.best);
-    painted += 1;
-    if (painted < 2) requestAnimationFrame(paint);
-    else window.__shotReady = true;
-  }
-  requestAnimationFrame(paint);
-}
-
-function runGame() {
-  const input = createInput(canvas);
-  let screen = SCREEN_TITLE;
-  let best = readBest();
-  let accumulator = 0;
-  let last = performance.now();
-
-  // Screen readers (and anyone watching the page's text) hear the screen changes and each hit.
-  function announce(message) {
-    status.textContent = message;
-  }
-
-  function startGame() {
-    world.reset();
-    accumulator = 0;
-    screen = SCREEN_PLAY;
-    announce(`Playing. ${LIVES} lives.`);
-  }
-
-  function endGame() {
-    screen = SCREEN_OVER;
-    if (world.state.score > best) {
-      best = world.state.score;
-      saveBest(best);
-    }
-    announce(`Game over. Score ${world.state.score}. Best ${best}.`);
-  }
-
-  function handleActions() {
-    const actions = input.takeActions();
-    if (actions & ACTION_CONFIRM && (screen === SCREEN_TITLE || screen === SCREEN_OVER)) startGame();
-    else if (actions & ACTION_PAUSE && screen === SCREEN_PLAY) {
-      screen = SCREEN_PAUSED;
-      announce('Paused.');
-    } else if (actions & (ACTION_PAUSE | ACTION_CONFIRM) && screen === SCREEN_PAUSED) {
-      screen = SCREEN_PLAY;
-      announce('Playing.');
-    }
-  }
-
-  function step() {
-    if (screen === SCREEN_TITLE) {
-      world.step(STEP, 0, true);
-      return;
-    }
-    const events = world.step(STEP, input.direction(), false);
-    if (events & EVENT_OVER) endGame();
-    else if (events & EVENT_HIT) announce(world.state.lives === 1 ? 'Hit. 1 life left.' : `Hit. ${world.state.lives} lives left.`);
-  }
-
-  function frame(now) {
-    requestAnimationFrame(frame);
-    accumulator += Math.min((now - last) / 1000, MAX_FRAME);
-    last = now;
-    handleActions();
-    if (screen === SCREEN_TITLE || screen === SCREEN_PLAY) {
-      while (accumulator >= STEP && (screen === SCREEN_TITLE || screen === SCREEN_PLAY)) {
-        step();
-        accumulator -= STEP;
-      }
-    } else {
-      accumulator = 0;
-    }
-    renderer.draw(world.state, screen, best);
-  }
-
-  // Leaving the tab pauses a running game rather than letting blocks fall unseen.
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && screen === SCREEN_PLAY) {
-      screen = SCREEN_PAUSED;
-      announce('Paused.');
-    }
+async function loadOriginalModule(name) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = `./src/${name}.js`;
+    script.onload = () => { window.VM.modules.push(name); resolve(); };
+    script.onerror = () => reject(new Error(`Feature ${name} is not installed yet.`));
+    document.head.appendChild(script);
   });
-
-  announce('Block Dodger. Press Space or click to start.');
-  requestAnimationFrame(frame);
 }
 
-if (shot) runShot(shot);
-else runGame();
+class VistaMarGame {
+  constructor(canvas) {
+    this.canvas = canvas; this.ctx = canvas.getContext('2d', { alpha: false });
+    this.input = new VM.DesktopInput(canvas);
+    this.params = new URLSearchParams(location.search);
+    this.seed = Number(this.params.get('seed')) || VM.CONFIG.seed;
+    this.rng = new VM.util.SeededRandom(this.seed);
+    this.systems = []; this.events = new Map(); this.toasts = [];
+    this.worldDraw = []; this.screenDraw = []; this.lightDraw = [];
+    this.mode = 'title'; this.staged = false; this.paused = false;
+    this.time = 0; this.visualTime = 0; this.dayPhase = .28; this.frameCount = 0;
+    this.cash = 350; this.reputation = 0;
+    this.stats = { distance: 0, stolen: 0, shots: 0, escapes: 0, missions: 0, wrecks: 0 };
+    this.width = 1280; this.height = 720; this.pixelRatio = 1; this.lastTime = 0;
+    this.resize(); addEventListener('resize', () => this.resize());
+    for (const install of VM.installers) install(this);
+    this.emit('ready');
+    document.getElementById('loading').classList.add('hidden');
+    this.canvas.focus();
+  }
+  resize() {
+    this.width = innerWidth; this.height = innerHeight;
+    this.pixelRatio = Math.min(devicePixelRatio || 1, 2);
+    this.canvas.width = Math.round(this.width * this.pixelRatio);
+    this.canvas.height = Math.round(this.height * this.pixelRatio);
+    this.ctx.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
+    this.emit?.('resize');
+  }
+  addSystem(name, system, priority = 50) {
+    this.systems.push({ name, system, priority }); this.systems.sort((a, b) => a.priority - b.priority);
+  }
+  on(name, callback) {
+    if (!this.events.has(name)) this.events.set(name, []);
+    this.events.get(name).push(callback);
+  }
+  emit(name, data) { for (const callback of this.events.get(name) || []) callback(data); }
+  notify(text, color = VM.CONFIG.colors.aqua, duration = 4) {
+    this.toasts.push({ text, color, life: duration });
+    if (this.toasts.length > 4) this.toasts.shift();
+  }
+  update(dt) {
+    this.visualTime += this.staged ? 0 : dt;
+    if (!this.paused && !this.staged) {
+      this.time += dt;
+      if (this.mode === 'play') this.dayPhase = (this.dayPhase + dt / VM.CONFIG.dayLength) % 1;
+      for (const { system } of this.systems) system.update?.(dt);
+      for (const toast of this.toasts) toast.life -= dt;
+      this.toasts = this.toasts.filter(toast => toast.life > 0);
+    }
+    for (const { system } of this.systems) system.interface?.(dt);
+  }
+  draw() {
+    this.ctx.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
+    if (this.renderer) this.renderer.draw(this.ctx);
+    else {
+      this.ctx.fillStyle = '#10282c'; this.ctx.fillRect(0, 0, this.width, this.height);
+      VM.util.label(this.ctx, 'VISTA MAR', 60, 150, 88, '#a0f1d6', 900);
+      VM.util.trackedText(this.ctx, 'LOW TIDE / THE COAST IS TAKING SHAPE', 64, 198, 3, 13);
+      VM.util.label(this.ctx, `${VM.modules.length} original systems installed`, 64, 260, 17);
+    }
+    for (const draw of this.screenDraw) draw(this.ctx);
+    this.frameCount++;
+    if (this.params.has('shot') && this.frameCount >= 8) window.__SHOT_READY__ = true;
+  }
+  snapshot() {
+    return { mode: this.mode, cash: this.cash, wanted: this.police?.stars || 0,
+      mission: this.missions?.index || 0, objective: this.missions?.objective || '',
+      health: this.player?.health, position: this.player && { x: this.player.x, y: this.player.y },
+      vehicle: this.player?.vehicle?.type || null, traffic: this.vehicles?.list.length || 0,
+      pedestrians: this.pedestrians?.list.length || 0, cops: this.police?.units.length || 0,
+      frames: this.frameCount, seed: this.seed, modules: VM.modules.length };
+  }
+  loop(timestamp) {
+    const dt = this.lastTime ? Math.min((timestamp - this.lastTime) / 1000, .04) : 1 / 60;
+    this.lastTime = timestamp; this.update(dt); this.draw(); this.input.endFrame();
+    requestAnimationFrame(next => this.loop(next));
+  }
+}
+
+async function bootVistaMar() {
+  for (const name of ORIGINAL_FEATURE_MODULES) {
+    try { await loadOriginalModule(name); }
+    catch (error) { console.info(error.message); }
+  }
+  const game = new VistaMarGame(document.getElementById('game'));
+  VM.game = game; window.__VISTA_MAR__ = game;
+  requestAnimationFrame(timestamp => game.loop(timestamp));
+}
+bootVistaMar().catch(error => {
+  document.getElementById('loading').textContent = `Vista Mar could not start: ${error.message}`;
+  console.error(error);
+});
