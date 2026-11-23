@@ -154,7 +154,7 @@
       game.particles.smoke(2340, 1520, '#8f968c', 8);
       game.combat.bullets = []; game.combat.shoot(hero.x, hero.y, hero.angle, 'sol');
       game.story.radio('Sol Vega', 'You wanted the coast. Now the coast wants you.', 6);
-      game.camera.snap(2050, 1490, .9); game.input.mouse = { x: 640, y: 363, down: false, clicked: false };
+      game.camera.snap(2050, 1490, 1.1); game.input.mouse = { x: 640, y: 363, down: false, clicked: false };
       game.cash = 4230; game.reputation = 32; game.stats.missions = 2; game.stats.stolen = 5; game.stats.escapes = 1;
       game.player.health = 80; game.player.armor = 35; game.player.ammo = 9; game.player.reserve = 84; game.player.stamina = 100;
     }
