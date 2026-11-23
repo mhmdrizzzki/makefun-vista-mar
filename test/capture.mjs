@@ -6,7 +6,7 @@ import { launchBrowser, watchPage, assertCanvas, GAME_URL, ARTIFACT_DIRECTORY } 
 
 const SHOT_MANIFEST = JSON.parse(readFileSync(new URL('../shots.json', import.meta.url), 'utf8'));
 const MINIMUM_BYTES = 30000, MAXIMUM_BYTES = 262144;
-const RECAPTURED = new Set(['1-start.jpg', '4-walk.jpg']);
+const RECAPTURED = new Set(['1-heat.jpg']);
 const browser = await launchBrowser();
 const results = [];
 try {

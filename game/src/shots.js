@@ -27,7 +27,7 @@
     }
     bootRequestedScene() {
       const shot = this.game.params.get('shot');
-      if (!['start', 'play', 'chase', 'night', 'walk'].includes(shot)) return;
+      if (!['start', 'play', 'chase', 'night', 'walk', 'heat'].includes(shot)) return;
       const game = this.game;
       game.staged = true; game.mode = shot === 'start' ? 'title' : 'play'; game.paused = false;
       game.camera.locked = true; game.visualTime = 2.7; game.time = 61.7;
@@ -38,7 +38,9 @@
       if (shot === 'chase') this.chaseScene();
       if (shot === 'night') this.nightScene();
       if (shot === 'walk') this.walkScene();
-      game.story.radioLine = null; game.toasts = []; game.camera.trauma = 0;
+      if (shot === 'heat') this.heatScene();
+      if (shot !== 'heat') game.story.radioLine = null;
+      game.toasts = []; game.camera.trauma = 0;
       window.__SHOT_SCENE__ = shot;
     }
     startScene() {
@@ -136,6 +138,25 @@
       this.pedestrians([[2150, 1420], [2430, 1340], [2540, 1290], [2590, 1450], [2120, 1680]]);
       game.player.angle = Math.atan2(gunman.y - game.player.y, gunman.x - game.player.x);
       game.camera.snap(2300, 1470, 1.2); game.input.mouse = { x: 640, y: 330, down: false, clicked: false };
+    }
+    heatScene() {
+      const game = this.game;
+      this.clearArea(2300, 1480, 440); game.dayPhase = .93; game.missions.reset();
+      game.police.setStars(3); game.police.seen = true; game.police.lastKnown = { x: 2050, y: 1490 };
+      game.missions.start(2); game.missions.stage = 'escape';
+      game.missions.shotMarker = { x: 2340, y: 1520, label: 'HOLD THE LINE', action: 'KEEP MOVING', hostile: false };
+      const hero = this.car('sports', 2050, 1490, -0.4, '#91d6bc', 'sol', 300); this.drive(hero);
+      hero.hp = 80; hero.speed = 300; hero.vx = Math.cos(-0.4) * 300; hero.vy = Math.sin(-0.4) * 300;
+      this.skid([[1995, 1515], [2040, 1498]]);
+      const box = (x, y, angle) => { const unit = game.police.spawnUnit(x, y, angle); unit.speed = 250; unit.desiredSpeed = 250; return unit; };
+      box(1920, 1448, -0.2); box(1920, 1532, 0.2); box(2260, 1452, 2.9); box(2260, 1528, -2.9);
+      const wreck = this.car('sedan', 2340, 1520, 0.6, '#a8b4bd', null); wreck.damage(999, 'sol');
+      game.particles.smoke(2340, 1520, '#8f968c', 8);
+      game.combat.bullets = []; game.combat.shoot(hero.x, hero.y, hero.angle, 'sol');
+      game.story.radio('Sol Vega', 'You wanted the coast. Now the coast wants you.', 6);
+      game.camera.snap(2050, 1490, .9); game.input.mouse = { x: 640, y: 363, down: false, clicked: false };
+      game.cash = 4230; game.reputation = 32; game.stats.missions = 2; game.stats.stolen = 5; game.stats.escapes = 1;
+      game.player.health = 80; game.player.armor = 35; game.player.ammo = 9; game.player.reserve = 84; game.player.stamina = 100;
     }
   }
   VM.WitnessScenes = WitnessScenes;
